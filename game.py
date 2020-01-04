@@ -2,16 +2,18 @@ from random import randint
 
 game_running = True
 
-game_results = []
+game_results = []                    # the game results list, empty at the beginning
 def calculate_monster_attack():
-    return randint(monster['attack_min'], monster['attack_max'] )
+    return randint(monster['attack_min'], monster['attack_max'])
 def calculate_heal():
     return randint(player['heal_min'], player['heal_max'])
+def calculate_player_attack():
+    return randint(player['attack_min'], player['attack_max'])
 
 while game_running == True:
     counter = 0
     new_round = True
-    player = {'name': '', 'attack': 10, 'heal_min': 15, 'heal_max':25, 'health': 100, 'mana': 40}
+    player = {'name': '', 'attack_min': 10, 'attack_max': 12, 'heal_min': 15, 'heal_max': 25, 'health': 100, 'mana': 40}
     monster = {'name': 'Ogre', 'attack_min': 10, 'attack_max': 15, 'health': 100}
 
     print("---" * 7)
@@ -30,15 +32,18 @@ while game_running == True:
         print("---" * 7)
         print("Please select action:")
         print("1) Attack")
-        print("2) Heal")
-        print("3) Exit Game")
-        print("4) Show Highscores")
+        if player['mana'] > 0:
+            print("2) Heal - cost 10 mana")
+            if player['mana'] <= 0:
+                print("Invalid Input")
+        print("3) Shield block")
+        print("4) Exit Game")
         print("---" * 7)
 
         player_choice = input()
 
         if player_choice == '1':
-            monster['health'] = monster['health'] - player['attack']
+            monster['health'] = monster['health'] - calculate_player_attack()
             if monster['health'] <= 0:
                 player_won = True
             else:
@@ -50,23 +55,27 @@ while game_running == True:
             if player['mana'] > 0:
                 player['health'] = player['health'] + calculate_heal()
                 player['mana'] = player['mana'] - 10
+                player['health'] = player['health'] - calculate_monster_attack()
+                if player['health'] > 100:
+                    player['health'] = 100
             elif player['mana'] <= 0:
                 print('Not enough mana!')
-                player['health'] = player['health'] - calculate_monster_attack()
-            if player['health'] > 100:
-                player['health'] = 100
-            player['health'] = player['health'] - calculate_monster_attack()
-            if player['health'] <= 0:
-                monster_won = True
+                if player['health'] <= 0:
+                    monster_won = True
 
         elif player_choice == '3':
+            monster['health'] = monster['health'] - calculate_player_attack() / 2
+            if monster['health'] <= 0:
+                player_won = True
+            else:
+                player['health'] = player['health'] - calculate_monster_attack() / 2
+                if player['health'] <= 0:
+                    monster_won = True
+
+        elif player_choice == '4':
             new_round = False
             game_running = False
 
-        elif player_choice == '4':
-            for item in game_results:
-                print(item)
-                print("---" * 7)
         else:
             print('Invalid input')
 
@@ -86,3 +95,21 @@ while game_running == True:
             round_result = {'name': player['name'], 'health': player['health'], 'rounds': counter}
             game_results.append(round_result)
             new_round = False
+
+    if player_won == True or monster_won == True:
+        print("---" * 7)
+        print("Please select action:")
+        print("1) Start a new game")
+        print("2) Show Highscores")
+        print("3) Exit Game")
+        print("---" * 7)
+        player_select = input()
+        if player_select == '1':
+            new_round = False
+        elif player_select == '2':
+            for item in game_results:
+                print(item)
+                print("---" * 7)
+        elif player_select == '3':
+            new_round = False
+            game_running = False
