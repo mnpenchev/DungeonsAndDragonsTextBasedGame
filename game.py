@@ -13,7 +13,7 @@ def calculate_player_attack():
 while game_running == True:
     counter = 0
     new_round = True
-    player = {'name': '', 'attack_min': 10, 'attack_max': 12, 'heal_min': 15, 'heal_max':25, 'health': 100, 'mana': 40}
+    player = {'name': '', 'attack_min': 10, 'attack_max': 12, 'heal_min': 15, 'heal_max': 25, 'health': 100, 'mana': 40}
     monster = {'name': 'Ogre', 'attack_min': 10, 'attack_max': 15, 'health': 100}
 
     print("---" * 7)
@@ -38,7 +38,6 @@ while game_running == True:
                 print("Invalid Input")
         print("3) Shield block")
         print("4) Exit Game")
-        print("5) Show Highscores")
         print("---" * 7)
 
         player_choice = input()
@@ -65,16 +64,18 @@ while game_running == True:
                     monster_won = True
 
         elif player_choice == '3':
-            pass
+            monster['health'] = monster['health'] - calculate_player_attack() / 2
+            if monster['health'] <= 0:
+                player_won = True
+            else:
+                player['health'] = player['health'] - calculate_monster_attack() / 2
+                if player['health'] <= 0:
+                    monster_won = True
 
         elif player_choice == '4':
             new_round = False
             game_running = False
 
-        elif player_choice == '5':
-            for item in game_results:
-                print(item)
-                print("---" * 7)
         else:
             print('Invalid input')
 
@@ -102,4 +103,13 @@ while game_running == True:
         print("2) Show Highscores")
         print("3) Exit Game")
         print("---" * 7)
-        if
+        player_select = input()
+        if player_select == '1':
+            new_round = False
+        elif player_select == '2':
+            for item in game_results:
+                print(item)
+                print("---" * 7)
+        elif player_select == '3':
+            new_round = False
+            game_running = False
