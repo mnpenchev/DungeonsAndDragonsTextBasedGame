@@ -1,0 +1,48 @@
+.game-footer {
+    background-color: rgba(0, 0, 0, 0.99);
+    min-height: 10%;
+}
+
+.main-game {
+    min-height: 800px;
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    text-align: center;
+}
+
+.game-left-section{
+    min-height: 100%;
+    border: 1px solid black;
+}
+
+.game-center-section {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    min-height: 100%;
+    border: 1px solid black;
+    
+}
+
+.game-right-section {
+    min-height: 100%;
+    border: 1px solid black;
+}
+
+.game-in-top {
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+
+.border {
+    border: 2px solid orange;
+}
+
+#player-img {
+    max-height: 200px;
+    transform: scaleX(-1);
+}
+
+#monster-img {
+    max-height: 200px;
+}
