@@ -45,4 +45,94 @@
 
 #monster-img {
     max-height: 200px;
+    transform: scaleX(-1);
+}
+
+.user-container {
+    background-color: rgba(0,0,0,0.98);
+    width: 90%; 
+    height: 300px; 
+    margin: 20px;
+    position: relative; 
+    top: 450px; 
+    border-radius: 15px;
+    border: 1px solid #E65100;
+    box-shadow: white 0px 0px 7px 5px;
+    color: white;
+}
+
+.user-c-in {
+    position: relative;
+    top: 50px;
+    margin: 0 auto;
+    width: 70%;
+    height: 70%;
+}
+
+.health, .mana, .heal {
+    display: grid;
+    grid-template-columns: 10% 80% 10%;
+    margin: 15px 8px;
+  }
+
+.health {
+    margin-top: 50px !important;
+}
+
+
+#out{
+    height: 10px;
+    width: 90%;
+    margin: 5px auto;
+    border: 2px solid orange;
+    border-radius: 10px;
+  }
+#demo {
+    height: 100%;
+    background-color: red;
+    border-radius: 10px;
+  }
+
+  .heart-icon {
+      color: red;
+      font-size: 20px;
+  }
+
+  .percentage {
+      color: red;
+      font-size: 22px;
+  }
+
+  #mana-scale {
+    height: 100%;
+    background-color: #29B6F6;
+    border-radius: 10px;
+  }
+
+  .mana-icon {
+    color: #29B6F6;
+    font-size: 20px;
+}
+
+#monster-health {
+    height: 100%;
+    background-color: red;
+    border-radius: 10px;
+}
+
+#monster-mana {
+    height: 100%;
+    background-color: #29B6F6;
+    border-radius: 10px;
+}
+
+.game-footer {
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    border: 2px solid black;
+}
+
+.black {
+    border: 1px solid black;
+    color: white ;
 }

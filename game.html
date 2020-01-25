@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="css/main.css">
+    <script src="https://kit.fontawesome.com/d6c9141bcd.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
@@ -15,8 +16,25 @@
     </header>
     <main class="main-game">
         <section class="game-left-section">
-            <div style="background-color: rgba(0,0,0,0.98); width: 90%; height: 300px; margin-left: auto;margin-right: auto; position: relative; top: 450px; border-radius: 3px; border: 1px solid #E65100; box-shadow: white 0px 0px 7px 5px;"  >
-
+            <div class="user-container">
+                <div class="user-c-in" >
+                    <div class="user-name-cont"><h2>User name</h2></div>
+          <div class="">(clan-name)</div>
+        <div class="health">
+          <div class=" heart-icon"><i class="fas fa-heart"></i></div>
+          <div id="out">
+            <div id="demo"></div>
+          </div>
+          <div class="percentage"><p id="h-per"></p></div>
+        </div>
+        <div class="mana">
+          <div class="mana-icon"><i class="fas fa-prescription-bottle-alt"></i></div>
+          <div id="out">
+            <div id="mana-scale"></div>
+          </div>
+          <div class="percentage"><p id="m-per"></p></div>
+          </div>
+                </div>
             </div>
         </section>
         <section class="game-center-section">
@@ -25,7 +43,7 @@
             </div>
             <div class="game-in-left border">
                 <h1 style="margin-top: 350px;">Player name</h1>
-                <img id="player-img" src="https://publicdomainvectors.org/photos/orc.png" alt="Player1 img">
+                <img id="player-img" src="images/warrior-v0.3.webp" alt="Player1 img">
             </div>
             <div class="game-in-center border">
                 Поле между играчи
@@ -36,17 +54,38 @@
             </div>
             <div class="game-in-right border">
                 <h1 style="margin-top: 350px;">Monster</h1>
-                <img id="monster-img" src="https://publicdomainvectors.org/photos/orc.png" alt="Player1 img">
+                <img id="monster-img" src="images/monster-v0.1.png" alt="Player1 img">
             </div>
         </section>
         <section class="game-right-section">
-            <div style="background-color: rgba(0,0,0,0.98); width: 90%; height: 300px; margin-left: auto;margin-right: auto; position: relative; top: 450px; border-radius: 3px; border: 1px solid #E65100; box-shadow: white 0px 0px 7px 5px;"  >
-
+            <div class="user-container">
+                <div class="user-c-in" >
+                    <div class="user-name-cont"><h2>Monster</h2></div>
+                    <div><p>(Red-dragon)</p></div>
+        <div class="health">
+          <div class=" heart-icon"><i class="fas fa-heart"></i></div>
+          <div id="out">
+            <div id="monster-health"></div>
+          </div>
+          <div class="percentage"><p id="h-per-monster"></p></div>
+        </div>
+        <div class="mana">
+          <div class="mana-icon"><i class="fas fa-prescription-bottle-alt"></i></div>
+          <div id="out">
+            <div id="monster-mana"></div>
+          </div>
+          <div class="percentage"><p id="m-per-monster"></p></div>
+          </div>
+                </div>
             </div>
         </section>
     </main>
     <footer class="game-footer">
+        <div class="black">1</div>
+        <div class="black">2</div>
+        <div class="black">3</div>
 
     </footer>
+    <script src="js/game.js"></script>
 </body>
 </html>
