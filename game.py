@@ -1,19 +1,30 @@
 from random import randint
 import datetime
 import time
+import sys
+from termcolor import \
+    colored  # https://stackoverflow.com/questions/287871/how-to-print-colored-text-in-terminal-in-python
 
 ts = time.time()
 sttime = datetime.datetime.fromtimestamp(ts).strftime('%d %m %Y %H:%M:%S')
 
 game_running = True
 
-print("Welcome to The road to Darromar, a turn style combat game,")
-print("based on D&D realm of Faerun.")
-print("You are an Adventurer, your ship arrived at Calimport last night.")
-print("and your mission is to cross the Calim Dessert and reach Darromar,")
-print("to meet with the rest of your party.")
-print("To defeat an enemy you must reduce their health to 0 \nby selecting actions from the combat menu. ")
-print("Good luck!")
+print(colored("Welcome to The road to Darromar, a turn style combat game,", 'blue'))
+print(colored("based on D&D realm of Faerun.", 'blue'))
+print(colored("You are an Adventurer, your ship arrived at Calimport last night.", 'blue'))
+print(colored("and your mission is to cross the Calim Dessert and reach Darromar,", 'blue'))
+print(colored("to meet with the rest of your party.", 'blue'))
+print(colored("To defeat an enemy you must reduce their health to 0 \nby selecting actions from the combat menu.",
+              'blue'))
+print(colored("Good luck!", 'red'))
+
+
+def delay_print(s):
+    for c in s:
+        sys.stdout.write(c)
+        sys.stdout.flush()
+        time.sleep(0.01)
 
 
 def calculate_monster_attack():
@@ -32,62 +43,63 @@ def calculate_player_heavy_attack():
     return randint(player['attack_min'] / 2, player['attack_max'] * 2)
 
 
-# def miss_chance():
-#    return randint(1, 2)
-#   if miss_chance() == 1:
-#       print(player['name'] + " missed!")
-#   else:
-
 while game_running is True:  # while game is running there is a round counter
     counter = 0
     new_round = False
-    player = {'name': '', 'attack_min': 10, 'attack_max': 12, 'heal_min': 15, 'heal_max': 25, 'health': 100, 'mana': 40,
+    in_town = True
+    player = {'name': 'Player', 'attack_min': 10, 'attack_max': 12, 'heal_min': 15, 'heal_max': 25, 'health': 100,
+              'mana': 40,
               'Shield_bash': 1}
     monster = {'name': 'Ogre', 'attack_min': 10, 'attack_max': 15, 'health': 100}
 
+    # print("---" * 7)
+    # print('Enter Player name:')  # input for the player name goes into the player list
+    # player["name"] = input()
+    # print("---" * 7)
+
     print("---" * 7)
-    print("Please select action:")
-    print("Enter 1 to Start a new game")
-    print("Enter 2 to Show Highscores")
-    print("Enter 3 to Exit Game")
+    delay_print("Please select action:\n")
+    delay_print("Enter 1 to Start a new game\n")
+    delay_print("Enter 2 to Show Highscores\n")
+    delay_print("Enter 3 to Exit Game\n")
     print("---" * 7)
     player_select = input()
 
     if player_select == '1':
         new_round = True
-        print("---" * 7)
-        print('Enter Player name:')  # input for the player name goes into the player list
-        player["name"] = input()
-        print("---" * 7)
-        print(player['name'] + ' has ' + str(player['health']) + ' health and ' + str(player['mana']) + ' mana left')
-        print(monster['name'] + ' has ' + str(monster['health']) + ' health left')
+        in_town = False
+        delay_print("FIGHT! FIGHT! FIGHT!\n")
+        print(player['name'] + ' has ' + str(colored(player['health'], 'red')) + colored(' health and ', 'red') + str(colored(player['mana'], 'blue')) + colored(' mana left', 'blue'))
+        print(monster['name'] + ' has ' + str(colored(monster['health'], 'red')) + colored(' health left', 'red'))
 
     elif player_select == '2':
         with open('highscores.txt', 'r') as f:  # reading the highscores from highscores.txt read only
             f.content = f.read()
-            print(f.content)
+            delay_print(f.content)
 
     elif player_select == '3':
         new_round = False
         game_running = False
+        in_town = False
 
     else:
-        print("Invalid input, enter number from the menu below")
+        print(colored("Invalid input, enter number from the menu below", 'red'))
 
-    while new_round is True:  # with this while loop every new round is set
+    while new_round is True and in_town is False:  # with this while loop every new round is set
         counter = counter + 1
         player_won = False
         monster_won = False
 
         print("#####" * 8)  # EVERY ROUND MENU IS SET HERE
-        print("Round " + str(counter) + ": Please select action:")
+        print("Round " + str(counter))
+        print("Please select action: ")
         print("1) Attack - Deals " + str(player['attack_min']) + " - " + str(player['attack_max']) + " damage.")
 
         if player['mana'] > 0:  # this is how action 2 gets hidden when run out of mana
             print("2) Heal - Restore " + str(player['heal_min']) + " - " + str(
                 player['heal_max']) + " health and cost 10 mana. \n Beware! Monster will attack you while you heal!")
             if player['mana'] <= 0:
-                print("Invalid Input")
+                print(colored("Invalid Input", 'red'))
 
         if player['Shield_bash'] > 0:
             print("3) Shield bash - Stuns the target for the current turn and deals " + str(
@@ -138,7 +150,8 @@ while game_running is True:  # while game is running there is a round counter
                 Sb = calculate_player_attack() / 2
                 monster['health'] = monster['health'] - Sb
                 print(
-                    "Monster is stunned for this round, " + player['name'] + " Shield bash done " + str(int(Sb)) + " damage to " +
+                    monster['name'] + " is stunned for this round, " + player['name'] + " Shield bash done " + str(
+                        int(Sb)) + " damage to " +
                     monster['name'])
                 player['Shield_bash'] = -1
             elif player['Shield_bash'] <= 0:
@@ -161,14 +174,15 @@ while game_running is True:  # while game is running there is a round counter
                     monster_won = True
 
         else:
-            print("Invalid input, please choose option from the menu below.")
+            print(colored("Invalid input, please choose option from the menu below.", 'red'))
             counter = counter - 1
 
         if player_won is False and monster_won is False:  # display health and mana after every round
-            print("---" * 7)
+            print("---" * 10)
             print(
-                player['name'] + ' has ' + str(player['health']) + ' health and ' + str(player['mana']) + ' mana left')
-            print(monster['name'] + ' has ' + str(monster['health']) + ' health left')
+                player['name'] + ' has ' + str(colored(player['health'], 'red')) + colored(' health and ', 'red') + str(
+                    colored(player['mana'], 'blue')) + colored(' mana left', 'blue'))
+            print(monster['name'] + ' has ' + str(colored(monster['health'], 'red')) + colored(' health left', 'red'))
 
         if player_won:
             print(player['name'] + " attack killed the " + monster['name'])
@@ -177,6 +191,7 @@ while game_running is True:  # while game is running there is a round counter
             with open('highscores.txt', 'a') as f:
                 f.write('%s\n' % round_result)
             new_round = False
+            in_town = True
 
         if monster_won:
             print(player['name'] + " has been killed by " + monster['name'])
@@ -186,3 +201,27 @@ while game_running is True:  # while game is running there is a round counter
             with open('highscores.txt', 'a') as f:
                 f.write('%s\n' % round_result)
             new_round = False
+
+    while new_round is False and in_town is True:
+        print("---" * 7)
+        delay_print("Please select action:\n")
+        delay_print("Enter 1 to Rest and Heal\n")
+        delay_print("Enter 2 to Fight the next monster\n")
+        delay_print("Enter 3 to Exit Game\n")
+        print("---" * 7)
+        player_select1 = input()
+
+        if player_select1 == '1':
+            player = {'name': '', 'attack_min': 10, 'attack_max': 12, 'heal_min': 15, 'heal_max': 25, 'health': 100,
+                      'mana': 40,
+                      'Shield_bash': 1}
+
+        if player_select1 == '2':
+            game_running = True
+            new_round = True
+            in_town = False
+
+        if player_select1 == '3':
+            new_round = False
+            game_running = False
+            in_town = False
