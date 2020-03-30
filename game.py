@@ -2,8 +2,9 @@ from random import randint
 import datetime
 import time
 import sys
-from termcolor import \
-    colored  # https://stackoverflow.com/questions/287871/how-to-print-colored-text-in-terminal-in-python
+from termcolor import colored
+
+# https://stackoverflow.com/questions/287871/how-to-print-colored-text-in-terminal-in-python
 
 ts = time.time()
 sttime = datetime.datetime.fromtimestamp(ts).strftime('%d %m %Y %H:%M:%S')
@@ -12,19 +13,27 @@ game_running = True
 
 print(colored("Welcome to The road to Darromar, a turn style combat game,", 'blue'))
 print(colored("based on D&D realm of Faerun.", 'blue'))
+print('')
 print(colored("You are an Adventurer, your ship arrived at Calimport last night.", 'blue'))
 print(colored("and your mission is to cross the Calim Dessert and reach Darromar,", 'blue'))
 print(colored("to meet with the rest of your party.", 'blue'))
+print('')
 print(colored("To defeat an enemy you must reduce their health to 0 \nby selecting actions from the combat menu.",
               'blue'))
+print('')
 print(colored("Good luck!", 'red'))
 
 
+# delay print function
 def delay_print(s):
     for c in s:
         sys.stdout.write(c)
         sys.stdout.flush()
         time.sleep(0.01)
+
+
+# clear console screen by adding empty lines
+clear = "\n" * 100
 
 
 def calculate_monster_attack():
@@ -69,7 +78,8 @@ while game_running is True:  # while game is running there is a round counter
         new_round = True
         in_town = False
         delay_print("FIGHT! FIGHT! FIGHT!\n")
-        print(player['name'] + ' has ' + str(colored(player['health'], 'red')) + colored(' health and ', 'red') + str(colored(player['mana'], 'blue')) + colored(' mana left', 'blue'))
+        print(player['name'] + ' has ' + str(colored(player['health'], 'red')) + colored(' health and ', 'red') + str(
+            colored(player['mana'], 'blue')) + colored(' mana left', 'blue'))
         print(monster['name'] + ' has ' + str(colored(monster['health'], 'red')) + colored(' health left', 'red'))
 
     elif player_select == '2':
@@ -174,7 +184,7 @@ while game_running is True:  # while game is running there is a round counter
                     monster_won = True
 
         else:
-            print(colored("Invalid input, please choose option from the menu below.", 'red'))
+            print(colored("Invalid input, please enter option from the menu.", 'red'))
             counter = counter - 1
 
         if player_won is False and monster_won is False:  # display health and mana after every round
