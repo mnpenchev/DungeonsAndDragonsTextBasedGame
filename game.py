@@ -161,7 +161,16 @@ def monster():
     return enemy
 
 
-def combat(a, b):
+def battle():
+    if player_class == fighter:
+        return combat_fighter(player_class, monster())
+    elif player_class == mage:
+        return combat_mage(player_class, monster())
+    else:
+        return combat_fighter(player_class, monster())
+
+
+def combat_fighter(a, b):
     while True:
         print("\nPlease select action:\n")
         print("1) Normal attack")
@@ -257,7 +266,114 @@ def combat(a, b):
             quit()
 
 
-combat(player_class, monster())
+def combat_mage(a, b):
+    while True:
+        print("\nPlease select action:\n")
+        print("1) Normal attack")
+        print("2) Cast Magic missile - 3d15 damage")
+        print("3) Cast Fireball - 5d20 damage, chance to harm yourself for 1d15 damage")
+        print("4) Heal")
+        player_select = input()
+
+        if player_select == "1":
+            if dice(1, 20) + a['dex'] - 10 > b['AC']:
+                b['health'] = b['health'] - dice(3, 15)
+                print(clear)
+                print(a['name'], "attacked the", b['name'], "for", dice(3, 15))
+            else:
+                print(clear)
+                print(a['name'], "missed!")
+
+        elif player_select == "2":
+            if dice(1, 20) + a['dex'] - 5 > b['AC']:
+                b['health'] = b['health'] - dice(3, 15)
+                print(clear)
+                print(a['name'], "magic missile damaged", b['name'], "for", dice(3, 15), "damage")
+            else:
+                print(clear)
+                print(a['name'], "missed!")
+
+        elif player_select == "3":
+            if dice(1, 20) + a['dex'] - 5 > b['AC']:
+                b['health'] = b['health'] - dice(5, 20)
+                if dice(1, 20) + a['dex'] > a['AC']:
+                    a['health'] = a['health'] - dice(1, 15)
+                print(a['name'], "Fireball damaged", a['name'], "for", dice(1, 15), "damage")
+                print(clear)
+                print(a['name'], "Fireball damaged", b['name'], "for", dice(5, 20), "damage")
+            else:
+                print(clear)
+                print(a['name'], "missed!")
+
+        elif player_select == "4":
+            a['health'] = a['health'] + dice(a['attack_num'], a['attack_dice'])
+            # ***** NO OVERHEAL ALLOWED! ****
+            if a['health'] + dice(a['attack_num'],
+                                  a['attack_dice']) > a['max_health']:
+                a['health'] = a['max_health']
+            print(clear)
+            print(a['name'], "healed for", dice(a['attack_num'], a['attack_dice']),
+                  "health")
+        else:
+            print(clear)
+            print(colored("Invalid input, please enter option from the menu. - (combat menu)", 'red'))
+            continue
+
+        if b['health'] <= 0:
+            print("You have defeated", b['name'], "and received", b['experience'], "experience and", b['gold'],
+                  "gold\n")
+            a['experience'] = a['experience'] + b['experience']
+            a['gold'] = a['gold'] + b['gold']
+            b['health'] = b['max_health']
+            if a['health'] + dice(a['attack_num'], a['attack_dice']) > a['max_health']:
+                a['health'] = a['max_health']
+            if a['experience'] >= 10:
+                a['level'] += 1
+                print(colored("Congratulations! You reached level", "blue"), colored(a['level'], "blue"),
+                      colored("!", "blue"))
+                a = level_up(a)
+                a['experience'] = 0
+            break
+
+        if b['health'] >= (b['max_health'] / 2):
+            enemy_select = randint(1, 2)
+        else:
+            enemy_select = randint(1, 3)
+
+        if enemy_select == 1:
+            if dice(1, 20) + b['dex'] - 7 > a['AC']:
+                a['health'] = a['health'] - dice(b['attack_num'], b['attack_dice'])
+                print(b['name'], "did", dice(b['attack_num'], b['attack_dice']), "damage!\n")
+            else:
+                print(b['name'], "missed!")
+
+        elif enemy_select == 2:
+            if dice(1, 20) + b['dex'] - 10 > a['AC']:
+                a['health'] = a['health'] - dice(round(b['attack_num'] / 2),
+                                                 b['attack_dice'] + 10)
+                print(b['name'], "did", dice(round(b['attack_num'] / 2), b['attack_dice'] + 10), "damage!\n")
+            else:
+                print(b['name'], "missed!")
+
+        elif enemy_select == 3:
+            b['health'] = b['health'] + dice(b['attack_num'], b['attack_dice'])
+            if b['health'] + dice(b['attack_num'], b['attack_dice']) > b['max_health']: b['health'] = b[
+                'max_health']
+            print(b['name'], "healed for", dice(b['attack_num'], b['attack_dice']), "health\n")
+
+        # display health after every round
+        if b['health'] >= 0 and a['health'] >= 0:
+            do_health(a['name'], a['health'], a['max_health'])
+            do_health(b['name'], b['health'], b['max_health'])
+
+        # in case player loose the fight, the game is over.
+        if a['health'] <= 0:
+            print(a['name'], "have been defeated.")
+            delay_print(colored("\nYou lost your live! \n **************** GAME OVER ****************", "red"))
+            quit()
+
+
+battle()
 
 while True:
     count = 0
@@ -290,7 +406,7 @@ while True:
         if search == 3:
             print(clear)
             print("Enemy appeared, prepare to fight!")
-            combat(player_class, monster())
+            battle()
             continue
         if search == 4:
             print(clear)
@@ -300,7 +416,7 @@ while True:
     if player_choice == "2":
         print(clear)
         print("You travel trough the dessert, after few hour of walking an enemy appeared!\n Prepare for combat.\n")
-        combat(player_class, monster())
+        battle()
         continue
     if player_choice == "3":
         print(clear)
@@ -315,6 +431,7 @@ while True:
                 player_class['health'] = player_class['max_health']
             player_class['health_potion'] -= 1
             print(player_class['name'], "restored", dice(1, 20), "health.")
+            do_health(player_class['name'], player_class['health'], player_class['max_health'])
             continue
     if player_choice == "5":
         quit()
