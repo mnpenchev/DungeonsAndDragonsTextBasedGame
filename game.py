@@ -1,11 +1,11 @@
 from random import randint
 import sys
 import time
-# https://stackoverflow.com/questions/287871/how-to-print-colored-text-in-terminal-in-python ***************************
+# https://stackoverflow.com/questions/287871/how-to-print-colored-text-in-terminal-in-python
 from termcolor import colored
 
 
-# delay print function ***** delay print function ***** delay print function ***** delay print function *****
+# delay print function *****
 def delay_print(s):
     for c in s:
         sys.stdout.write(c)
@@ -13,7 +13,7 @@ def delay_print(s):
         time.sleep(0.05)
 
 
-# ROLL DICE FUNCTIONS ******** ROLL DICE FUNCTIONS ******** ROLL DICE FUNCTIONS ******** ROLL DICE FUNCTIONS *****
+# ROLL DICE FUNCTIONS ********
 def side(sides):
     return randint(1, sides)
 
@@ -38,7 +38,7 @@ def do_health(hero_name, current_health, maximum_health):
           colored(maximum_health, "red"), "/", colored(current_health, "red"))
 
 
-# clear console screen by adding empty lines *************************** clear console screen by adding empty lines
+# clear console screen by adding empty lines
 clear = "\n" * 100
 
 # print the game prolog ********* print the game prolog ********* print the game prolog ********* print the game prolog
@@ -51,7 +51,7 @@ print(colored("To defeat an enemy you must reduce their health to 0 \nby selecti
               'blue'))
 print(colored("Good luck!", 'red'))
 
-# Defining player hero - class, and attributes *********************** Defining player hero - class, and attributes
+# Defining player hero - class, and attributes
 ## mainhero = {'name': 'Playername', 'attack_num': 2, 'attack_dice': 20, 'health': 100, 'AC': 10, 'init': 14, 'experience': 0, 'gold': 0,
 ##           'level': 1}
 fighter = {'name': 'Korgan', 'attack_num': 3, 'attack_dice': 10, 'max_health': 250, 'health': 250, 'AC': 15, 'dex': 16,
@@ -71,17 +71,17 @@ rogue = {'name': 'Yoshimo', 'attack_num': 4, 'attack_dice': 10, 'max_health': 16
          'gold': 0,
          'level': 1}
 
-# picking up hero ****** picking up hero ******* picking up hero ******* picking up hero ******* picking up hero *******
+# picking up hero ******
 while True:
     delay_print("\nPick up a hero!\n")
     print("\n1) Fighter: ")
-    print("Name:", fighter['name'], "\nHealth:", fighter['health'], "/ Attack: 3d10 / Armor class", fighter['AC'])
+    print("Name:", fighter['name'], "\nHealth:", fighter['health'], "/ Attack: 3d15 / Armor class", fighter['AC'])
     print("\n2) Mage: ")
-    print("Name:", mage['name'], "\nHealth:", mage['health'], "/ Attack: 2d10 / Armor class", mage['AC'])
+    print("Name:", mage['name'], "\nHealth:", mage['health'], "/ Attack: 3d15 / Armor class", mage['AC'])
     print("\n3) Priest: ")
-    print("Name:", cleric['name'], "\nHealth:", cleric['health'], "/ Attack: 2d10 / Armor class", cleric['AC'])
+    print("Name:", cleric['name'], "\nHealth:", cleric['health'], "/ Attack: 1d15 / Armor class", cleric['AC'])
     print("\n4) Rogue: ")
-    print("Name:", rogue['name'], "\nHealth:", rogue['health'], "/ Attack: 4d10 / Armor class", rogue['AC'])
+    print("Name:", rogue['name'], "\nHealth:", rogue['health'], "/ Attack: 3d15 / Armor class", rogue['AC'])
     player_class = input("\nSelect your class: ")
 
     if player_class == "1":
@@ -107,7 +107,7 @@ while True:
 
 ##print(player_class['name'], ", this is where your story begins....\n")
 
-# LEVEL UP FUNCTION **************LEVEL UP FUNCTION **************LEVEL UP FUNCTION ******************LEVEL UP FUNCTION
+# LEVEL UP FUNCTION **************
 def level_up(player_class):
     player_class['max_health'] += dice(2, 10)
     player_class['health'] = player_class['max_health']
@@ -123,7 +123,7 @@ def level_up(player_class):
 
 
 while True:
-    # picking up an opponent # GAME LOOP ****** picking up an opponent # GAME LOOP ******
+    # picking up an opponent # GAME LOOP
     monster1 = {'name': 'Ogre', 'attack_num': 2, 'attack_dice': 10, 'health': 150, 'max_health': 150, 'AC': 12,
                 'dex': 13,
                 'experience': 5, 'gold': dice(1, 10)}
@@ -165,7 +165,6 @@ while True:
         print("\nYou are fighting", enemy['name'], "with", colored(enemy['health'], "red"), colored("health!", "red"))
 
 
-    # Hero turn *** Hero turn **** Hero turn **** Hero turn **** Hero turn **** Hero turn **** Hero turn ****
     def combat(a, b):
         while True:
             print("\nPlease select action:\n")
@@ -178,7 +177,8 @@ while True:
                 if dice(1, 20) + a['dex'] - 7 > b['AC']:
                     b['health'] = b['health'] - dice(a['attack_num'], a['attack_dice'])
                     print(clear)
-                    print(a['name'], "attacked the", b['name'], "for", dice(a['attack_num'], a['attack_dice']), "damage")
+                    print(a['name'], "attacked the", b['name'], "for", dice(a['attack_num'], a['attack_dice']),
+                          "damage")
                 else:
                     print(clear)
                     print(a['name'], "missed!")
@@ -261,5 +261,48 @@ while True:
                 delay_print(colored("\nYou lost your live! \n **************** GAME OVER ****************", "red"))
                 break
 
-
     combat(player_class, enemy)
+    break
+
+while True:
+    print("\nWhat would you want to do next?\n")
+    print("1) Scavenge the area: ")
+    print("2) Continue to the next area: ")
+    print("3) Go back in town: ")
+    print("4) Leave the game: ")
+    player_choice = input()
+
+    if player_choice == "1":
+        print("\nSearch the area for gold and items\n")
+        search = randint(1, 3)
+        if search == 1:
+            gold_find = randint(1, 10)
+            print(clear)
+            print("Scavenged the area and found", gold_find, "gold.")
+            player_class['gold'] = player_class['gold'] + gold_find
+            continue
+        if search == 2:
+            print(clear)
+            gold_find = randint(1, 10)
+            print("you couldn't find anything and leave empty handed")
+            continue
+        if search == 3:
+            print(clear)
+            print("Another enemy appeared, prepare to fight!")
+            combat(player_class, enemy)
+            continue
+    if player_choice == "2":
+        print(clear)
+        print("You travel trough the dessert, after few hour of walking an enemy appeared!\n Prepare for combat.\n")
+        combat(player_class, enemy)
+        continue
+    if player_choice == "3":
+        print(clear)
+        print("Heading back to town to restore your health")
+        player_class['health'] = player_class['max_health']
+        print(player_class['name'], "restored")
+        continue
+    if player_choice == "4":
+        break
+    else:
+        print(colored("\nPlease select a valid choice.", "red"))
